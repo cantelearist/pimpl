@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  git-mirror:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    container_name: pimpl-git-mirror
+    ports:
+      - "45139:8080"
+    volumes:
+      - git_data:/var/git
+    environment:
+      - GITHUB_REPO=https://github.com/cantelearist/pimpl.git
+      - SYNC_INTERVAL=300
+    restart: unless-stopped
+    networks:
+      - pimpl_network
+
+volumes:
+  git_data:
+    driver: local
+
+networks:
+  pimpl_network:
+    driver: bridge
